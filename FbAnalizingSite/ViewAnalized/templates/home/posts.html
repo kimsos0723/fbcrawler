@@ -1,0 +1,47 @@
+<html lang="kr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POST</title>
+  
+</head>
+
+<body>
+  {% for post in posts %}
+  <div>
+    <p>
+      {% for name in post.mentioned_names|slice:":-1" %}
+      {{ name }}
+      {% endfor %}
+      -> {{ post.mentioned_names|last }}
+    </p>  
+
+    {% for text in post.analyzed_text %}
+      <div>
+        <p>
+          {{ text.0 }}        
+        </p>      
+        <p>
+          {% if text.1.0 <= 0 %}
+          부정 
+          {% else %}
+          긍정
+          {% endif %}
+          정도:
+          {{ text.1.1 }}
+        </p>
+      </div>
+    {% endfor %}
+
+    <div style="overflow: scroll; max-height: 50vh;">
+      {% for img in post.imgs %}
+      <img src="{{ img }}">
+      {% endfor %}
+    </div>
+  </div>
+  <p>----------------------------------------------------------------------------</p>
+  {% endfor %}
+</body>
+
+</html>

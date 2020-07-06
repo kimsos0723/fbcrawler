@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+</body>
+<script>
+    const string = "{{ fr_json | safe }}".replace(/[']/gi, "\"");
+    const choices_name = JSON.parse(string);
+    const div = document.createElement("div");
+    
+    for (const key in choices_name) {
+        const innerDiv = document.createElement("div");
+        const tag = document.createElement("a");
+        tag.innerText = key
+        tag.href = 'http://localhost:8000?id='+choices_name[key];
+        innerDiv.appendChild(tag);
+        div.appendChild(innerDiv);
+    }
+
+    document.body.appendChild(div);
+</script>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    {% load static %}
+    
+    <style>
+        #login_wrapper {
+            position: absolute;
+            top: 40%;
+            left: 40%;
+            border: solid 2px blue;
+        }
+        input {
+            height: 1.4rem;
+            width: 300px;
+        }
+        button {
+            margin: 0 auto;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div id="login_wrapper">
+        <div>
+            <input id="id" type="text" placeholder="아이디">
+        </div>
+        <div>
+            <input id="pw" type="password" placeholder="비밀번호">
+        </div>
+        <div>
+            <button onclick="onButtonClicked()">로그인</button>
+        </div>
+    </div>    
+</body>
+{% csrf_token %}
+<script type="text/javascript">
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+    
+    async function onButtonClicked() {
+        const id = document.getElementById("id").value;
+        const pw = document.getElementById("pw").value;
+
+        const result = await $.post("/login", {
+            id,
+            pw
+        });
+
+        if (result === "돈까스 모임") {
+            location.href = "/friends";
+        } else {
+            alert("스윙스가 되서 와라.");
+        }
+    }
+    
+
+</script>
+</html>
